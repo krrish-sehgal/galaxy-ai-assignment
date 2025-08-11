@@ -1,14 +1,23 @@
 # ChatGPT Clone
 
-A pixel-perfect ChatGPT clone built└── temp_docs/ # Development documentation
+A pixel-perfect ChatGPT clone built with Next.js 15, featuring AI conversations, memory persistence, and file uploads.
 
-````
+## ✨ Features
+
+- **🎯 Pixel-perfect UI**: Matching ChatGPT's design and user experience
+- **🤖 AI Conversations**: Powered by Google Gemini with intelligent responses
+- **🧠 Memory System**: Conversation context using Mem0 for personalized interactions
+- **📁 File Uploads**: Support for images and documents via Cloudinary
+- **🎨 Modern Stack**: Next.js 15, TypeScript, TailwindCSS, ShadCN/UI
+- **🔧 Developer Experience**: ESLint, Prettier, TypeScript strict mode
+- **📱 Responsive Design**: Mobile-first approach with dark/light themes
 
 ## 🧩 Modular Architecture
 
 The project uses a **modular component architecture** for better organization and maintainability:
 
 ### Component Modules
+
 - **`ui/`** - Base shadcn/ui components (Button, Input, Card, etc.)
 - **`chat/`** - Chat functionality (ChatView, MemoryManager, SearchBar)
 - **`layout/`** - Page structure (Sidebar, Topbar, Hero)
@@ -16,6 +25,7 @@ The project uses a **modular component architecture** for better organization an
 - **`providers/`** - React context providers (ThemeProvider)
 
 ### Import Patterns
+
 ```typescript
 // Module-based imports (recommended)
 import { ChatViewNew, MemoryManager } from "@/components/chat";
@@ -24,11 +34,9 @@ import { Button, Input } from "@/components/ui";
 
 // Or import from main index
 import { ChatViewNew, Sidebar, Button } from "@/components";
-````
+```
 
 > 📖 **Detailed Documentation**: See [`src/components/README.md`](src/components/README.md) for complete architecture guide.
-
-## 🚀 Quick Starth Next.js 15, featuring AI conversations, memory persistence, and file uploads.
 
 ## ✨ Features
 
@@ -81,12 +89,11 @@ import { ChatViewNew, Sidebar, Button } from "@/components";
 └── temp_docs/           # Development documentation
 ```
 
-## � Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
 
 - **Node.js 18+** and npm/pnpm/yarn
-- **MongoDB** database (local or cloud)
 - **API Keys** for Google Gemini, Cloudinary, and Mem0
 
 ### Installation
@@ -145,9 +152,6 @@ Create a `.env.local` file in the root directory:
 # Google Gemini AI
 GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key
 
-# MongoDB Database
-MONGODB_URI=your_mongodb_connection_string
-
 # Cloudinary File Storage
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
@@ -181,7 +185,6 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 - **Vercel AI SDK** - AI integration utilities
 - **Mem0** - Conversation memory and context
 - **Cloudinary** - File and image storage
-- **MongoDB** - Database for data persistence
 
 ### Development Tools
 
@@ -222,27 +225,6 @@ The application is fully responsive and follows:
 ### Vercel (Recommended)
 
 The easiest way to deploy is using [Vercel](https://vercel.com):
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fyour-username%2Fchatgpt-home-clone)
-
-#### Quick Deploy Steps:
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Add environment variables in Vercel dashboard
-4. Deploy automatically on every push
-
-#### Environment Variables for Vercel:
-
-```bash
-GOOGLE_GENERATIVE_AI_API_KEY=your_gemini_api_key
-MONGODB_URI=your_mongodb_connection_string
-CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
-CLOUDINARY_API_KEY=your_cloudinary_api_key
-CLOUDINARY_API_SECRET=your_cloudinary_api_secret
-MEM0_API_KEY=your_mem0_api_key
-NEXT_PUBLIC_APP_URL=https://your-app.vercel.app
-```
 
 #### Using Vercel CLI:
 
@@ -300,10 +282,6 @@ npm run format:check
 # Build for production
 npm run build
 ```
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
 
 ## 🔗 Resources
 

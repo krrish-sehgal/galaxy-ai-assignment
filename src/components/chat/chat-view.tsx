@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
+import { MarkdownRenderer } from "@/components/common";
 import type { UploadedFile } from "@/types";
 
 type Role = "user" | "assistant";
@@ -386,7 +387,7 @@ export function ChatViewNew({
                   <div className="flex items-start gap-3 max-w-[85%]">
                     <div className="space-y-3">
                       <div className="text-zinc-100 leading-relaxed">
-                        {message.content}
+                        <MarkdownRenderer content={message.content} />
                         {streamingMessageId === message.id && (
                           <span className="inline-block w-3 h-3 bg-white rounded-full ml-1 animate-pulse" />
                         )}
