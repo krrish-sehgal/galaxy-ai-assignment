@@ -477,26 +477,28 @@ export default function Page() {
           />
         </aside>
 
-        {/* Mobile Sidebar */}
-        <Sidebar
-          chats={chats}
-          activeChatId={activeChatId}
-          onSelectChat={id => {
-            setActiveChatId(id);
-            setIsMobileSidebarOpen(false);
-          }}
-          onNewChat={() => {
-            handleNewChat();
-            setIsMobileSidebarOpen(false);
-          }}
-          onShowMemoryManager={() => {
-            setShowMemoryManager(true);
-            setIsMobileSidebarOpen(false);
-          }}
-          setChats={setChats}
-          isMobileOpen={isMobileSidebarOpen}
-          onMobileClose={() => setIsMobileSidebarOpen(false)}
-        />
+        {/* Mobile Sidebar - only render when open */}
+        {isMobileSidebarOpen && (
+          <Sidebar
+            chats={chats}
+            activeChatId={activeChatId}
+            onSelectChat={id => {
+              setActiveChatId(id);
+              setIsMobileSidebarOpen(false);
+            }}
+            onNewChat={() => {
+              handleNewChat();
+              setIsMobileSidebarOpen(false);
+            }}
+            onShowMemoryManager={() => {
+              setShowMemoryManager(true);
+              setIsMobileSidebarOpen(false);
+            }}
+            setChats={setChats}
+            isMobileOpen={isMobileSidebarOpen}
+            onMobileClose={() => setIsMobileSidebarOpen(false)}
+          />
+        )}
 
         <main
           className="relative flex flex-col flex-1 max-h-screen overflow-hidden transition-colors duration-700 ease-in-out"
