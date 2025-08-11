@@ -7,6 +7,7 @@ import {
   Wand2,
   Sparkles,
   Brain,
+  X,
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -36,6 +37,8 @@ interface SidebarProps {
   onNewChat: () => void;
   onShowMemoryManager: () => void;
   setChats: (value: React.SetStateAction<Chat[]>) => void;
+  isMobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 function SidebarButton({
@@ -235,91 +238,129 @@ export function Sidebar({
   onNewChat,
   onShowMemoryManager,
   setChats,
+  isMobileOpen = false,
+  onMobileClose,
 }: SidebarProps) {
   return (
-    <div className="flex flex-col h-full min-h-screen">
-      {/* Brand */}
-      <div className="flex items-center gap-3 px-4 h-14 flex-shrink-0">
-        <div className="h-8 w-8 rounded-full bg-black flex items-center justify-center border border-white/20">
-          <img src="/open-ai-logo.png" alt="OpenAI" className="h-6 w-6" />
+    <>
+      {/* Mobile backdrop */}
+      {isMobileOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={onMobileClose}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Sidebar */}
+      <div
+        className={cn(
+          "flex flex-col h-full min-h-screen bg-[rgb(24,24,24)]",
+          // Mobile styles
+          "md:relative md:transform-none md:transition-none",
+          isMobileOpen
+            ? "fixed inset-y-0 left-0 z-50 w-64 transform translate-x-0"
+            : "fixed inset-y-0 left-0 z-50 w-64 transform -translate-x-full md:translate-x-0"
+        )}
+      >
+        {/* Mobile close button */}
+        {isMobileOpen && (
+          <div className="md:hidden flex justify-end p-4">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onMobileClose}
+              className="text-zinc-400 hover:text-white"
+              aria-label="Close navigation menu"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
+        )}
+
+        {/* Brand */}
+        <div className="flex items-center gap-3 px-4 h-14 flex-shrink-0">
+          <div className="h-8 w-8 rounded-full bg-black flex items-center justify-center border border-white/20">
+            <img src="/open-ai-logo.png" alt="OpenAI" className="h-6 w-6" />
+          </div>
         </div>
-      </div>
 
-      <div className="flex-1 overflow-y-auto">
-        <nav className="px-3 py-2">
-          <SidebarButton
-            icon={Plus}
-            label="New chat"
-            onClick={onNewChat}
-            active={false}
-          />
-          <SidebarButton icon={Search} label="Search chats" />
-          <SidebarButton
-            icon={Brain}
-            label="AI Memory"
-            onClick={onShowMemoryManager}
-          />
-          <SidebarButton icon={Library} label="Library" />
-          <div className="mt-4 text-xs uppercase tracking-wide text-zinc-400 px-2"></div>
-          <SidebarButton icon={Wand2} label="Sora" />
-          <SidebarButton icon={Bot} label="GPTs" />
-          <SidebarButton icon={Sparkles} label="image generator pro" />
-          <SidebarButton icon={Sparkles} label="Website Generator" />
+        <div className="flex-1 overflow-y-auto">
+          <nav className="px-3 py-2">
+            <SidebarButton
+              icon={Plus}
+              label="New chat"
+              onClick={onNewChat}
+              active={false}
+            />
+            <SidebarButton icon={Search} label="Search chats" />
+            <SidebarButton
+              icon={Brain}
+              label="AI Memory"
+              onClick={onShowMemoryManager}
+            />
+            <SidebarButton icon={Library} label="Library" />
+            <div className="mt-4 text-xs uppercase tracking-wide text-zinc-400 px-2"></div>
+            <SidebarButton icon={Wand2} label="Sora" />
+            <SidebarButton icon={Bot} label="GPTs" />
+            <SidebarButton icon={Sparkles} label="image generator pro" />
+            <SidebarButton icon={Sparkles} label="Website Generator" />
 
-          {chats.length > 0 && (
-            <div className="mt-5 text-xs  tracking-wide text-zinc-400 px-2">
-              Chats
+            {chats.length > 0 && (
+              <div className="mt-5 text-xs  tracking-wide text-zinc-400 px-2">
+                Chats
+              </div>
+            )}
+
+            <div role="list" aria-label="Chats">
+              {chats.map(c => (
+                <ChatListItem
+                  key={c.id}
+                  chat={c}
+                  isActive={c.id === activeChatId}
+                  onSelect={() => onSelectChat(c.id)}
+                  onDelete={() => {
+                    setChats(prev => prev.filter(chat => chat.id !== c.id));
+                    if (c.id === activeChatId) {
+                      onSelectChat("");
+                      localStorage.removeItem("chatgpt-active-chat-id");
+                    }
+                  }}
+                  onRename={(newTitle: string) => {
+                    setChats(prev =>
+                      prev.map(chat =>
+                        chat.id === c.id ? { ...chat, title: newTitle } : chat
+                      )
+                    );
+                  }}
+                  onArchive={() => {
+                    // For now, just remove from list - in a real app you'd mark as archived
+                    setChats(prev => prev.filter(chat => chat.id !== c.id));
+                    if (c.id === activeChatId) {
+                      onSelectChat("");
+                      localStorage.removeItem("chatgpt-active-chat-id");
+                    }
+                  }}
+                />
+              ))}
             </div>
-          )}
+          </nav>
+        </div>
 
-          <div role="list" aria-label="Chats">
-            {chats.map(c => (
-              <ChatListItem
-                key={c.id}
-                chat={c}
-                isActive={c.id === activeChatId}
-                onSelect={() => onSelectChat(c.id)}
-                onDelete={() => {
-                  setChats(prev => prev.filter(chat => chat.id !== c.id));
-                  if (c.id === activeChatId) {
-                    onSelectChat("");
-                    localStorage.removeItem("chatgpt-active-chat-id");
-                  }
-                }}
-                onRename={(newTitle: string) => {
-                  setChats(prev =>
-                    prev.map(chat =>
-                      chat.id === c.id ? { ...chat, title: newTitle } : chat
-                    )
-                  );
-                }}
-                onArchive={() => {
-                  // For now, just remove from list - in a real app you'd mark as archived
-                  setChats(prev => prev.filter(chat => chat.id !== c.id));
-                  if (c.id === activeChatId) {
-                    onSelectChat("");
-                    localStorage.removeItem("chatgpt-active-chat-id");
-                  }
-                }}
-              />
-            ))}
-          </div>
-        </nav>
-      </div>
-
-      {/* User */}
-      <div className="p-3 border-t border-white/10 flex-shrink-0">
-        <div className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-white/5 transition">
-          <Avatar className="h-8 w-8 border border-white/10">
-            <AvatarImage src="/abstract-avatar.png" alt="User avatar" />
-            <AvatarFallback>KS</AvatarFallback>
-          </Avatar>
-          <div className="min-w-0">
-            <div className="text-sm font-medium truncate">Krrish Sehgal</div>
-            <div className="text-xs text-zinc-400">Free</div>
+        {/* User */}
+        <div className="p-3 border-t border-white/10 flex-shrink-0">
+          <div className="flex items-center gap-3 rounded-lg px-3 py-2 hover:bg-white/5 transition">
+            <Avatar className="h-8 w-8 border border-white/10">
+              <AvatarImage src="/abstract-avatar.png" alt="User avatar" />
+              <AvatarFallback>KS</AvatarFallback>
+            </Avatar>
+            <div className="min-w-0">
+              <div className="text-sm font-medium truncate">Krrish Sehgal</div>
+              <div className="text-xs text-zinc-400">Free</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

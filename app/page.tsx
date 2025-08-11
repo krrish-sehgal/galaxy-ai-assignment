@@ -18,6 +18,7 @@ export default function Page() {
   const [streamingMessageId, setStreamingMessageId] = useState<string | null>(
     null
   );
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   // Load conversations from localStorage on mount
   useEffect(() => {
     const savedChats = localStorage.getItem("chatgpt-conversations");
@@ -47,6 +48,18 @@ export default function Page() {
       }
     }
   }, []);
+
+  // Handle escape key to close mobile sidebar
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && isMobileSidebarOpen) {
+        setIsMobileSidebarOpen(false);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isMobileSidebarOpen]);
 
   // Save conversations to localStorage whenever they change
   useEffect(() => {
@@ -463,13 +476,35 @@ export default function Page() {
             setChats={setChats}
           />
         </aside>
+
+        {/* Mobile Sidebar */}
+        <Sidebar
+          chats={chats}
+          activeChatId={activeChatId}
+          onSelectChat={id => {
+            setActiveChatId(id);
+            setIsMobileSidebarOpen(false);
+          }}
+          onNewChat={() => {
+            handleNewChat();
+            setIsMobileSidebarOpen(false);
+          }}
+          onShowMemoryManager={() => {
+            setShowMemoryManager(true);
+            setIsMobileSidebarOpen(false);
+          }}
+          setChats={setChats}
+          isMobileOpen={isMobileSidebarOpen}
+          onMobileClose={() => setIsMobileSidebarOpen(false)}
+        />
+
         <main
           className="relative flex flex-col flex-1 max-h-screen overflow-hidden transition-colors duration-700 ease-in-out"
           style={{
             backgroundColor: hasConversation ? "rgb(33,33,33)" : "transparent",
           }}
         >
-          <Topbar />
+          <Topbar onMobileMenuToggle={() => setIsMobileSidebarOpen(true)} />
           {/* Content area */}
           {showMemoryManager ? (
             <div className="p-6">

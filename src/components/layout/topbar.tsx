@@ -1,7 +1,11 @@
-import { ChevronDown, Sparkles, Bell, Settings } from "lucide-react";
+import { ChevronDown, Sparkles, Bell, Settings, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-export function Topbar() {
+interface TopbarProps {
+  onMobileMenuToggle?: () => void;
+}
+
+export function Topbar({ onMobileMenuToggle }: TopbarProps) {
   return (
     <header className="flex items-center gap-3 px-4 md:px-6 h-14">
       <div className="md:hidden">
@@ -9,8 +13,10 @@ export function Topbar() {
           variant="outline"
           size="icon"
           className="bg-black border-white/10 hover:bg-zinc-900"
+          onClick={onMobileMenuToggle}
+          aria-label="Open navigation menu"
         >
-          <img src="/open-ai-logo.png" alt="OpenAI" className="h-5 w-5" />
+          <Menu className="h-5 w-5" />
         </Button>
       </div>
       <div className="flex items-center gap-2">
