@@ -101,7 +101,7 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
+      "./scripts/eslint-legacy.sh",
       "prettier --write"
     ],
     "*.{json,md}": [

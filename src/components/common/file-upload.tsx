@@ -82,7 +82,7 @@ export function FileUpload({
 
   const getFileIcon = (fileType: string, resourceType: string) => {
     if (resourceType === "image") {
-      return <Image className="h-4 w-4" />;
+      return <Image className="h-4 w-4" aria-label="Image file" />;
     }
     if (fileType.includes("pdf")) {
       return <FileText className="h-4 w-4 text-red-500" />;
