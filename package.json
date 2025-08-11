@@ -16,6 +16,7 @@
     "vercel:deploy": "vercel --prod",
     "vercel:preview": "vercel"
   },
+  "npmrc": ".npmrc",
   "dependencies": {
     "@ai-sdk/google": "^2.0.3",
     "@ai-sdk/openai": "^2.0.8",
