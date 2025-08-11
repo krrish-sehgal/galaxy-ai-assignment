@@ -4,7 +4,7 @@ import type React from "react";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { MemoryManager } from "@/components/chat";
 import { BackgroundGlow } from "@/components/common";
-import { Topbar, Sidebar, Hero } from "@/components/layout";
+import { Topbar, Sidebar, Hero, MobileSidebar } from "@/components/layout";
 import { ChatViewNew } from "@/components/chat";
 import { generateChatTitle, nid } from "@/lib/chat-utils";
 import type { Message, Chat, UploadedFile } from "@/types";
@@ -478,27 +478,16 @@ export default function Page() {
         </aside>
 
         {/* Mobile Sidebar - only render when open */}
-        {isMobileSidebarOpen && (
-          <Sidebar
-            chats={chats}
-            activeChatId={activeChatId}
-            onSelectChat={id => {
-              setActiveChatId(id);
-              setIsMobileSidebarOpen(false);
-            }}
-            onNewChat={() => {
-              handleNewChat();
-              setIsMobileSidebarOpen(false);
-            }}
-            onShowMemoryManager={() => {
-              setShowMemoryManager(true);
-              setIsMobileSidebarOpen(false);
-            }}
-            setChats={setChats}
-            isMobileOpen={isMobileSidebarOpen}
-            onMobileClose={() => setIsMobileSidebarOpen(false)}
-          />
-        )}
+        <MobileSidebar
+          chats={chats}
+          activeChatId={activeChatId}
+          onSelectChat={setActiveChatId}
+          onNewChat={handleNewChat}
+          onShowMemoryManager={() => setShowMemoryManager(true)}
+          setChats={setChats}
+          isOpen={isMobileSidebarOpen}
+          onClose={() => setIsMobileSidebarOpen(false)}
+        />
 
         <main
           className="relative flex flex-col flex-1 max-h-screen overflow-hidden transition-colors duration-700 ease-in-out"
